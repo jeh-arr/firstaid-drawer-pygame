@@ -28,6 +28,7 @@ The system controls solenoid locks via GPIO and guides the user through triage a
 ### Install dependencies
 ```bash
 pip install -r requirements.txt
+```
 
 ## Project Structure
 - `main.py` → main entry point
