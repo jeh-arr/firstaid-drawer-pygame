@@ -1,41 +1,37 @@
-import pygame, states
-
+# main.py
+import pygame
+from state_manager import StateManager
+from views.start import StartScreen
+from views.main_menu import MainMenu
+# later: from views.emergency_menu import EmergencyMenu, etc.
 
 pygame.init()
-info = pygame.display.Info()
-screen = pygame.display.set_mode((info.current_w, info.current_h))
-# screen = pygame.display.set_mode((600, 400))
+screen = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("First Aid Drawer")
+clock = pygame.time.Clock()
 
+manager = StateManager("start")
+manager.add_state(StartScreen())
+manager.add_state(MainMenu())
 
-run = True
-
-while run:
-    for event in pygame.event.get():
+running = True
+while running:
+    dt = clock.tick(60) / 1000
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
-            run = False
-    screen.fill((255, 255, 255))
-    
-    currentstates = "mainmenu"
-    
-    match currentstates:
-        case "mainmenu":
-            pygame.draw.rect(screen, (0, 255, 0), (50, 50, 200, 100))  # Example button
-            pygame.draw.rect(screen, (0, 0, 255), (350, 50, 200, 100))  # Example button
-        
-    match event.type:
-        case pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Left click
-                pygame.draw.circle(screen, (255, 0, 0), event.pos, 10)
-            elif event.button == 3:  # Right click
-                pygame.draw.circle(screen, (0, 0, 255), event.pos, 10)
-        case pygame.MOUSEMOTION:
-            if event.buttons[0]:  # Left button held down
-                pygame.draw.circle(screen, (255, 0, 0), event.pos, 10)
-            elif event.buttons[2]:  # Right button held down
-                pygame.draw.circle(screen, (0, 0, 255), event.pos, 10)
-        case pygame.KEYDOWN:
-            if event.key == pygame.K_c:  # Clear screen on 'c' key press        
-                run = False
-    pygame.display.update()
-    
+            running = False
+
+    current = manager.get_state()
+    next_state = current.handle_events(events)
+    if next_state:
+        if next_state == "quit":
+            running = False
+        else:
+            manager.switch(next_state)
+
+    current.update(dt)
+    current.draw(screen)
+    pygame.display.flip()
+
+pygame.quit()
