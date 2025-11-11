@@ -31,10 +31,12 @@ class StateManager:
         if state_name in self.states:
             while any(pygame.mouse.get_pressed()):
                 pygame.event.pump()
-            # reset per-state ephemeral flags when switching to new major flows if needed
+            
             if state_name == "guide":
                 self.drawer_opened = False
             self.current_state = state_name
-
+            state = self.states[state_name]
+            if hasattr(state, "on_enter"):
+                state.on_enter()
     def get_state(self):
         return self.states[self.current_state]
