@@ -5,31 +5,51 @@ from button import Button
 import assets
 from guide_data import guide_data
 
-# fixed button coordinates for 8 injury buttons (tweak to match your design)
-BUTTON_POS = [
-    (150, 160), (550, 160), (950, 160), (1350, 160),
-    (150, 460), (550, 460), (950, 460), (1350, 460)
-]
+BUTTON_SIZE = 280
+BUTTON_SPACING = 65
+COLUMNS = 4
+ROWS = 2
+TOTAL_WIDTH = COLUMNS * BUTTON_SIZE + (COLUMNS - 1) * BUTTON_SPACING
+TOTAL_HEIGHT = ROWS * BUTTON_SIZE + (ROWS - 1) * BUTTON_SPACING
+
+
+SCREEN_W, SCREEN_H = 1920, 1080
+START_X = (SCREEN_W - TOTAL_WIDTH) // 2
+START_Y = (SCREEN_H - TOTAL_HEIGHT) // 2
 
 class EmergencyMenu(State):
     def __init__(self):
         super().__init__("emergency_menu")
         self.bg = assets.emergency_menu_bg
-        # create buttons in the order of guide_data keys (stable order)
+
         keys = list(guide_data.keys())
-        self.keys = keys  # store order
+        self.keys = keys
         self.buttons = []
-        for i, key in enumerate(keys):
-            x, y = BUTTON_POS[i]
-            # if you have individual button images per injury, load here; else use shared image
-            btn_img = assets.injury_btn_img if hasattr(assets, "injury_btn_img") else assets.emergency_btn_img
+
+        for idx, key in enumerate(keys):
+            row = idx // COLUMNS
+            col = idx % COLUMNS
+            x = START_X + col * (BUTTON_SIZE + BUTTON_SPACING)
+            y = START_Y + row * (BUTTON_SIZE + BUTTON_SPACING)
+
+            # load injury button 
+            img_path = f"images/button/{key.lower().split('(')[0].strip().replace(' ', '_').replace('/', '_')}_btn.png"
+
+            try:
+                btn_img = pygame.image.load(img_path).convert_alpha()
+            except:
+                btn_img = assets.emergency_btn_img 
+
             btn = Button(x, y, btn_img, 1.0, click_sound=assets.click_sfx)
             self.buttons.append((btn, key))
 
+        self.surface = None
+
     def handle_events(self, events):
+        if not self.surface:
+            return None
         for btn, key in self.buttons:
             if btn.draw(self.surface):
-                # save selected injury in manager and go to triage
                 self.manager.current_injury = key
                 return "triage"
         return None

@@ -18,3 +18,5 @@ learning_btn_img = pygame.image.load("images/button/learning_btn.png")
 
 yes_btn_img = pygame.image.load("images/button/yes_btn.png")
 no_btn_img = pygame.image.load("images/button/no_btn.png")
+
+# injury_btn_img = pygame.image.load("images/button/faint_icon.png")

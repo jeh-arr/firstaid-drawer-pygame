@@ -24,10 +24,10 @@ guide_data = {
         ],
         "severe_bg": "images/lacerationSevere.jpg"
     },
-    "Bruise / Contusion": {
+    "Bruise and Contusion": {
         "images": [f"images/bruise{str(i).zfill(2)}.jpg" for i in range(1, 7)],
         "screen": "bruise_guide",
-        "key": "Bruise / Contusion",
+        "key": "Bruise and Contusion",
         "question_bg": "images/bruiseQuestions.jpg",
         "questions": [
             "Is there severe pain or swelling in the injured area?",
