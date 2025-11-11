@@ -4,8 +4,8 @@ from views.start import StartScreen
 from views.main_menu import MainMenu
 from views.emergency_menu import EmergencyMenu
 from views.triage import Triage
-# from views.severe import Severe
-# from views.guide import Guide
+from views.severe import Severe
+from views.guide import Guide
 import assets  
 
 pygame.init()
@@ -18,8 +18,8 @@ manager.add_state(StartScreen())
 manager.add_state(MainMenu())
 manager.add_state(EmergencyMenu())
 manager.add_state(Triage())
-# manager.add_state(Severe())
-# manager.add_state(Guide())
+manager.add_state(Severe())
+manager.add_state(Guide())
 
 for s in manager.states.values():
     s.manager = manager

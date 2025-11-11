@@ -14,9 +14,10 @@ back_sfx = pygame.mixer.Sound("audio/pop_cancel.mp3")
 # Load button images
 emergency_btn_img = pygame.image.load("images/button/emergency_btn.png")
 learning_btn_img = pygame.image.load("images/button/learning_btn.png")
-# injury_btn_img = pygame.image.load("images/button/injury_btn.png").convert_alpha()
-
+main_menu_btn_img = pygame.image.load("images/button/mainmenu_btn.png")
+# injury_btn_img = pygame.image.load("images/button/injury_btn.png")
+next_btn_img = pygame.image.load("images/button/next_btn.png")
+back_btn_img = pygame.image.load("images/button/back_btn.png")
 yes_btn_img = pygame.image.load("images/button/yes_btn.png")
 no_btn_img = pygame.image.load("images/button/no_btn.png")
 
-# injury_btn_img = pygame.image.load("images/button/faint_icon.png")

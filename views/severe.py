@@ -5,15 +5,24 @@ from button import Button
 import assets
 from guide_data import guide_data
 
+
 class Severe(State):
     def __init__(self):
         super().__init__("severe")
-        self.main_btn = Button(800, 900, assets.main_menu_btn_img, 1.0, click_sound=assets.back_sfx)
-        self.font = pygame.font.Font(None, 48)
+        self.bg = None
+        self.main_btn = Button(820, 965, assets.main_menu_btn_img, 1.0, click_sound=assets.back_sfx)
+        self.surface = None
+
+    def on_enter(self):
+        injury = self.manager.current_injury
+        data = guide_data[injury]
+        self.bg = pygame.image.load(data["severe_bg"]).convert()
 
     def handle_events(self, events):
+        if not self.surface:
+            return None
         if self.main_btn.draw(self.surface):
-            return "start"
+            return "main_menu"
         return None
 
     def update(self, dt):
@@ -21,14 +30,5 @@ class Severe(State):
 
     def draw(self, surface):
         self.surface = surface
-        injury = self.manager.current_injury
-        bg_path = guide_data[injury]["severe_bg"]
-        try:
-            bg = pygame.image.load(bg_path).convert()
-            surface.blit(bg, (0,0))
-        except Exception:
-            surface.fill((100,0,0))
-            txt = self.font.render("Help is on the way", True, (255,255,255))
-            surface.blit(txt, (400, 300))
-
+        surface.blit(self.bg, (0, 0))
         self.main_btn.draw(surface)

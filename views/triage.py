@@ -18,7 +18,7 @@ class Triage(State):
         self.surface = None
 
         self.font = pygame.font.Font(None, 64)
-        self.text_color = (255, 255, 255)
+        self.text_color = (164, 0, 0)
 
     def on_enter(self):
         # Refresh data 

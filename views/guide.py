@@ -4,61 +4,72 @@ from state_manager import State
 from button import Button
 import assets
 from guide_data import guide_data
-from utils import unlock_drawer_for, send_sms
+
 
 class Guide(State):
     def __init__(self):
         super().__init__("guide")
+        self.images = []
         self.index = 0
-        self.font = pygame.font.Font(None, 36)
-        # Buttons: main, emergency, back, next (positions can be adjusted)
-        self.main_btn = Button(80, 920, assets.main_menu_btn_img, 1.0, click_sound=assets.back_sfx)
-        self.emergency_btn = Button(540, 920, assets.emergency_small_btn_img, 1.0, click_sound=assets.click_sfx)
-        self.back_btn = Button(1000, 920, assets.back_small_btn_img, 1.0, click_sound=assets.back_sfx)
-        self.next_btn = Button(1400, 920, assets.next_small_btn_img, 1.0, click_sound=assets.click_sfx)
+        self.bg = None
+        self.surface = None
+        self.font = pygame.font.Font(None, 64)
+
+        # Buttons
+        self.next_btn = Button(1400, 900, assets.next_btn_img, 1.0, click_sound=assets.click_sfx)
+        self.back_btn = Button(300, 900, assets.back_btn_img, 1.0, click_sound=assets.back_sfx)
+        self.emergency_btn = Button(850, 900, assets.emergency_btn_img, 1.0, click_sound=assets.click_sfx)
+        self.main_btn = Button(820, 900, assets.main_btn_img, 1.0, click_sound=assets.back_sfx)
+
+        self.triggered_solenoid = False
+
+    def on_enter(self):
+        """Load correct images for selected injury."""
+        injury = self.manager.current_injury
+        data = guide_data[injury]
+        self.images = [pygame.image.load(img).convert() for img in data["images"]]
+        self.index = 0
+        self.triggered_solenoid = False
 
     def handle_events(self, events):
-        if self.main_btn.draw(self.surface):
-            return "start"
-        if self.emergency_btn.draw(self.surface):
-            # immediate emergency SMS
-            if self.manager.mode == "emergency":
-                send_sms(f"Request assistance: {self.manager.current_injury}")
+        if not self.surface:
             return None
-        if self.back_btn.draw(self.surface):
-            if self.index > 0:
-                self.index -= 1
-            return None
-        if self.next_btn.draw(self.surface):
-            imgs = self.images()
-            if self.index < len(imgs) - 1:
+
+        # Draw buttons and check actions
+        if self.index < len(self.images) - 1:
+            if self.next_btn.draw(self.surface):
                 self.index += 1
-            return None
+        if self.index > 0:
+            if self.back_btn.draw(self.surface):
+                self.index -= 1
+        if self.index == 0:
+            # Emergency available throughout, only disabled in learning mode
+            if self.emergency_btn.draw(self.surface) and self.manager.mode == "emergency":
+                print("[ALERT] Sending emergency SMS...")
+                # send_sms(self.manager.current_injury)  # placeholder for future
+        if self.index == len(self.images) - 1:
+            if self.main_btn.draw(self.surface):
+                return "main_menu"
         return None
 
-    def images(self):
-        return guide_data[self.manager.current_injury]["images"]
-
     def update(self, dt):
-        # on first page open: trigger drawer once if emergency mode and not yet opened
-        if self.index == 0 and self.manager.mode == "emergency" and not self.manager.drawer_opened:
-            unlock_drawer_for(self.manager.current_injury)
-            self.manager.drawer_opened = True
+        # Trigger solenoid only once at first page if in emergency mode
+        if self.manager.mode == "emergency" and not self.triggered_solenoid:
+            print(f"[HARDWARE] Unlocking drawer for: {self.manager.current_injury}")
+            # trigger_solenoid(self.manager.current_injury)  # placeholder
+            self.triggered_solenoid = True
 
     def draw(self, surface):
         self.surface = surface
-        imgs = self.images()
-        path = imgs[self.index]
-        try:
-            bg = pygame.image.load(path).convert()
-            surface.blit(bg, (0,0))
-        except Exception:
-            surface.fill((30,30,30))
-            txt = self.font.render(f"Guide page {self.index+1}/{len(imgs)}", True, (255,255,255))
-            surface.blit(txt, (100, 100))
+        if self.images:
+            surface.blit(self.images[self.index], (0, 0))
 
-        # navigation buttons
-        self.main_btn.draw(surface)
-        self.emergency_btn.draw(surface)
-        self.back_btn.draw(surface)
-        self.next_btn.draw(surface)
+        # draw buttons depending on page
+        if self.index == len(self.images) - 1:
+            self.main_btn.draw(surface)
+        else:
+            if self.index > 0:
+                self.back_btn.draw(surface)
+            self.next_btn.draw(surface)
+            if self.manager.mode == "emergency":
+                self.emergency_btn.draw(surface)
