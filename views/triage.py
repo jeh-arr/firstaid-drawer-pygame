@@ -25,7 +25,7 @@ class Triage(State):
         self.answered_yes = False
         self.surface = None
 
-        self.font = pygame.font.Font(None, 64)
+        self.font = pygame.font.Font(None, int(64 * assets.scale_min))
         self.text_color = (164, 0, 0)
     
     def on_enter(self):
@@ -69,11 +69,16 @@ class Triage(State):
 
     def draw(self, surface):
         self.surface = surface
-        surface.blit(self.bg, (0, 0))
+        if self.bg:
+            surface.blit(self.bg, (0, 0))
+
         if self.index < len(self.questions):
             text = self.questions[self.index]
             rendered = self.font.render(text, True, self.text_color)
-            rect = rendered.get_rect(center=(surface.get_width() // 2, 600))
+            # Y position scaled relative to screen height
+            y_pos = int(600 * assets.scale_y)
+            rect = rendered.get_rect(center=(surface.get_width() // 2, y_pos))
             surface.blit(rendered, rect)
+
         self.yes_btn.draw(surface)
         self.no_btn.draw(surface)
