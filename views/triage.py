@@ -24,9 +24,19 @@ class Triage(State):
         # Refresh data 
         injury = self.manager.current_injury
         data = guide_data[injury]
-        self.bg = pygame.image.load(data["question_bg"]).convert()
-        self.questions = data["questions"]
-        self.severe_bg = data["severe_bg"]
+        if not data:
+            print(f"[WARN] No guide data for '{self.manager.current_injury}', skipping triage.")
+            return
+
+        try:
+            self.bg = pygame.image.load(data["question_bg"]).convert()
+            self.questions = data.get("questions", [])
+            self.severe_bg = data.get("severe_bg")
+        except (FileNotFoundError, TypeError):
+            print(f"[WARN] Missing triage assets for '{self.manager.current_injury}', skipping triage.")
+            self.manager.current_injury = None
+            # stay in emergency menu instead of crashing
+            self.manager.switch("emergency_menu")
         self.index = 0
         self.answered_yes = False
 
