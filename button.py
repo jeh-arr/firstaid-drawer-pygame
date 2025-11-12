@@ -1,10 +1,11 @@
 import pygame
+from assets import scale_min, scale_x, scale_y
 class Button:
     def __init__(self, x, y, image, scale, click_sound=None):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
-        self.rect = self.image.get_rect(topleft=(x, y))
+        global_scale = scale * scale_min
+        width, height = image.get_size()
+        self.image = pygame.transform.scale(image, (int(width * global_scale), int(height * global_scale)))
+        self.rect = self.image.get_rect(topleft=(int(x * scale_x), int(y * scale_y)))
         self.click_sound = click_sound
         self.pressed_inside = False   # only true if press began on this button
 

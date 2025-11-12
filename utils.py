@@ -1,6 +1,7 @@
 # utils.py
 import threading
-
+import pygame
+import assets
 try:
     import RPi.GPIO as GPIO
     import serial
@@ -80,3 +81,28 @@ def send_sms(injury):
             print(f"[ERROR] SMS failed: {e}")
 
     threading.Thread(target=_sms, daemon=True).start()
+
+
+def apply_scaling():
+    """Scales all loaded images in assets.py according to screen resolution."""
+    factor_x, factor_y = assets.scale_x, assets.scale_y
+
+    def scale_img(img):
+        w, h = img.get_size()
+        return pygame.transform.scale(img, (int(w * factor_x), int(h * factor_y)))
+
+    # scale main images
+    assets.start_bg = scale_img(assets.start_bg)
+    assets.main_menu_bg = scale_img(assets.main_menu_bg)
+    assets.emergency_menu_bg = scale_img(assets.emergency_menu_bg)
+
+    # scale buttons
+    assets.emergency_btn_img = scale_img(assets.emergency_btn_img)
+    assets.learning_btn_img = scale_img(assets.learning_btn_img)
+    assets.main_menu_btn_img = scale_img(assets.main_menu_btn_img)
+    assets.emergency_call_btn_img = scale_img(assets.emergency_call_btn_img)
+    assets.emergency_menu_btn_img = scale_img(assets.emergency_menu_btn_img)
+    assets.next_btn_img = scale_img(assets.next_btn_img)
+    assets.back_btn_img = scale_img(assets.back_btn_img)
+    assets.yes_btn_img = scale_img(assets.yes_btn_img)
+    assets.no_btn_img = scale_img(assets.no_btn_img)

@@ -20,7 +20,7 @@ class Guide(State):
         self.back_btn = Button(1150, 950, assets.back_btn_img, 1.0, click_sound=assets.back_sfx)
         self.emergency_btn = Button(875, 947, assets.emergency_call_btn_img, 1.0, click_sound=assets.click_sfx)
         self.main_btn = Button(820, 965, assets.main_menu_btn_img, 1.0, click_sound=assets.back_sfx)
-        self.emergency_main_btn = Button(1100, 950, assets.emergenccy_menu_btn_img, 1.0, click_sound=assets.back_sfx)
+        self.emergency_main_btn = Button(1100, 950, assets.emergency_menu_btn_img, 1.0, click_sound=assets.back_sfx)
 
         self.triggered_solenoid = False
 

@@ -6,10 +6,30 @@ from views.emergency_menu import EmergencyMenu
 from views.triage import Triage
 from views.severe import Severe
 from views.guide import Guide
-import assets  
+import assets, utils 
 
 pygame.init()
-screen = pygame.display.set_mode((1920, 1080))
+
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+actual_w, actual_h = screen.get_size()
+
+
+BASE_W, BASE_H = 1920, 1080
+
+scale_x = actual_w / BASE_W
+scale_y = actual_h / BASE_H
+scale_min = min(scale_x, scale_y)
+
+
+assets.scale_x = scale_x
+assets.scale_y = scale_y
+assets.scale_min = scale_min
+assets.actual_w = actual_w
+assets.actual_h = actual_h
+
+# from utils import apply_scaling
+utils.apply_scaling()
+
 pygame.display.set_caption("First Aid Drawer")
 clock = pygame.time.Clock()
 
