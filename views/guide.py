@@ -39,7 +39,6 @@ class Guide(State):
         first_page = self.index == 0
         last_page = self.index == len(self.images) - 1
 
-        # active buttons per state
         active_buttons = []
 
         if last_page:
@@ -53,7 +52,7 @@ class Guide(State):
             elif self.manager.mode == "emergency":
                 active_buttons.append(("emergency", self.emergency_btn))
 
-        # check only active buttons
+        # cdraw active buttons[]
         for name, btn in active_buttons:
             if btn.draw(self.surface):
                 if name == "next":
@@ -65,13 +64,13 @@ class Guide(State):
                 elif name == "emergency_menu":
                     return "emergency_menu"
                 elif name == "emergency":
-                    print("[ALERT] Sending emergency SMS...")
-                    if not first_page and self.manager.mode == "emergency" and self.emergency_btn.draw(self.surface):
+                    if self.manager.mode == "emergency":
+                        print("[ALERT] Sending emergency SMS...")
                         send_sms(self.manager.current_injury)
         return None
 
     def update(self, dt):
-        # Trigger solenoid only once at first page if in emergency mode
+        
         # if self.manager.mode == "emergency" and not self.triggered_solenoid:
             
         #     # trigger_solenoid(self.manager.current_injury)  # placeholder

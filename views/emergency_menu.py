@@ -50,8 +50,14 @@ class EmergencyMenu(State):
             return None
         for btn, key in self.buttons:
             if btn.draw(self.surface):
+                data = guide_data[key]
+                required_fields = ["images", "question_bg", "severe_bg"]
+                if not all(data.get(f) for f in required_fields):
+                    print(f"[WARN] Missing assets for '{key}', ignoring selection.")
+                    return None
                 self.manager.current_injury = key
                 return "triage"
+
         return None
 
     def update(self, dt):

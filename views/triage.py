@@ -4,7 +4,7 @@ from state_manager import State
 from button import Button
 import assets
 from guide_data import guide_data
-
+from utils import send_sms
 
 class Triage(State):
     def __init__(self):
@@ -26,6 +26,7 @@ class Triage(State):
         data = guide_data[injury]
         self.bg = pygame.image.load(data["question_bg"]).convert()
         self.questions = data["questions"]
+        self.severe_bg = data["severe_bg"]
         self.index = 0
         self.answered_yes = False
 
@@ -36,6 +37,8 @@ class Triage(State):
         # buttons 
         if self.yes_btn.draw(self.surface):
             self.answered_yes = True
+            if self.manager.mode == "emergency":
+                send_sms(self.manager.current_injury)
             return "severe"
         if self.no_btn.draw(self.surface):
             self.index += 1
