@@ -6,6 +6,14 @@ import assets
 from guide_data import guide_data
 from utils import send_sms
 
+
+
+def load_scaled_image(path):
+    img = pygame.image.load(path).convert()
+    w = int(img.get_width() * assets.scale_x)
+    h = int(img.get_height() * assets.scale_y)
+    return pygame.transform.scale(img, (w, h))
+
 class Triage(State):
     def __init__(self):
         super().__init__("triage")
@@ -19,7 +27,7 @@ class Triage(State):
 
         self.font = pygame.font.Font(None, 64)
         self.text_color = (164, 0, 0)
-
+    
     def on_enter(self):
         # Refresh data 
         injury = self.manager.current_injury
@@ -29,7 +37,7 @@ class Triage(State):
             return
 
         try:
-            self.bg = pygame.image.load(data["question_bg"]).convert()
+            self.bg = load_scaled_image(data["question_bg"])
             self.questions = data.get("questions", [])
             self.severe_bg = data.get("severe_bg")
         except (FileNotFoundError, TypeError):
