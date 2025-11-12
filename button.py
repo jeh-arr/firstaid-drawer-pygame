@@ -4,7 +4,7 @@ class Button:
     def __init__(self, x, y, image, scale=1.0, click_sound=None):
         width, height = image.get_size()
 
-        scaled_w = int(width * scale * assets.scale_x * 1.33)   # +10% width
+        scaled_w = int(width * scale * assets.scale_x * 1.8)   # +10% width
         scaled_h = int(height * scale * assets.scale_y * 1.33) # +33% height
         scaled_x = int(x * assets.scale_x)
         scaled_y = int(y * assets.scale_y)
