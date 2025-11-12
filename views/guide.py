@@ -4,7 +4,7 @@ from state_manager import State
 from button import Button
 import assets
 from guide_data import guide_data
-
+from utils import trigger_solenoid, send_sms
 
 class Guide(State):
     def __init__(self):
@@ -66,15 +66,20 @@ class Guide(State):
                     return "emergency_menu"
                 elif name == "emergency":
                     print("[ALERT] Sending emergency SMS...")
+                    if not first_page and self.manager.mode == "emergency" and self.emergency_btn.draw(self.surface):
+                        send_sms(self.manager.current_injury)
         return None
 
     def update(self, dt):
         # Trigger solenoid only once at first page if in emergency mode
+        # if self.manager.mode == "emergency" and not self.triggered_solenoid:
+            
+        #     # trigger_solenoid(self.manager.current_injury)  # placeholder
+        #     self.triggered_solenoid = True
         if self.manager.mode == "emergency" and not self.triggered_solenoid:
             print(f"[HARDWARE] Unlocking drawer for: {self.manager.current_injury}")
-            # trigger_solenoid(self.manager.current_injury)  # placeholder
+            trigger_solenoid(self.manager.current_injury)
             self.triggered_solenoid = True
-
     
     def draw(self, surface):
         self.surface = surface

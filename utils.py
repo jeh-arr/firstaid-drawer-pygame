@@ -20,7 +20,7 @@ RELAY_PINS = {
     "Burns (1st or 2nd)": 20,
     "Choking (Partial)": 21,
 }
-SMS_NUMBER = "+639XXXXXXXXX"  # clinic/medical personnel number
+SMS_NUMBER = "+639XXXXXXXXX"  # update number
 
 
 # --- SETUP ---
@@ -32,7 +32,7 @@ if ON_PI:
 
 
 # --- FUNCTIONS ---
-def trigger_solenoid(injury, duration=3):
+def trigger_solenoid(injury, duration=10):
     """Activate the corresponding drawer solenoid."""
     if injury not in RELAY_PINS:
         print(f"[WARN] No relay pin configured for: {injury}")
@@ -55,7 +55,7 @@ def trigger_solenoid(injury, duration=3):
 
 
 def send_sms(injury):
-    """Send an SMS alert using SIM800L."""
+    
     print(f"[SMS] Sending alert for: {injury}")
 
     def _sms():
