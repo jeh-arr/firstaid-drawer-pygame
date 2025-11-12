@@ -2,14 +2,10 @@ import pygame
 import assets
 class Button:
     def __init__(self, x, y, image, scale=1.0, click_sound=None):
-        # automatically scale image and position based on actual screen ratio
-        width = image.get_width()
-        height = image.get_height()
+        width, height = image.get_size()
 
-        # apply scaling relative to screen
-        global_scale = scale * assets.scale_min
-        scaled_w = int(width * global_scale)
-        scaled_h = int(height * global_scale)
+        scaled_w = int(width * scale * assets.scale_x)
+        scaled_h = int(height * scale * assets.scale_y)
         scaled_x = int(x * assets.scale_x)
         scaled_y = int(y * assets.scale_y)
 
