@@ -6,6 +6,7 @@ from views.emergency_menu import EmergencyMenu
 from views.triage import Triage
 from views.severe import Severe
 from views.guide import Guide
+from views.settings import Settings
 import assets, utils 
 
 pygame.init()
@@ -44,6 +45,7 @@ manager.add_state(EmergencyMenu())
 manager.add_state(Triage())
 manager.add_state(Severe())
 manager.add_state(Guide())
+manager.add_state(Settings())
 
 for s in manager.states.values():
     s.manager = manager

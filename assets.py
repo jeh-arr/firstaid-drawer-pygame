@@ -13,6 +13,7 @@ emergency_menu_bg = pygame.image.load("images/emergency_menu.png")
 # SFX
 click_sfx = pygame.mixer.Sound("audio/pop_confirm.mp3")
 back_sfx = pygame.mixer.Sound("audio/pop_cancel.mp3")
+keyboard_sfx = pygame.mixer.Sound("audio/key_pressed.mp3")
 
 # Buttons
 emergency_btn_img = pygame.image.load("images/button/emergency_btn.png")
@@ -24,6 +25,9 @@ next_btn_img = pygame.image.load("images/button/next_btn.png")
 back_btn_img = pygame.image.load("images/button/back_btn.png")
 yes_btn_img = pygame.image.load("images/button/yes_btn.png")
 no_btn_img = pygame.image.load("images/button/no_btn.png")
+back2_btn_img = pygame.image.load("images/button/back2_btn.png")
+quit_btn_img = pygame.image.load("images/button/quit_btn.png")
+save_btn_img = pygame.image.load("images/button/save_btn.png")
 
 # scale_x = scale_y = scale_min = 1
 # actual_w = actual_h = 1920
