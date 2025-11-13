@@ -6,11 +6,11 @@ import assets
 from guide_data import guide_data
 
 
-def load_scaled_image(path):
-    img = pygame.image.load(path).convert()
-    w = int(img.get_width() * assets.scale_x)
-    h = int(img.get_height() * assets.scale_y)
-    return pygame.transform.scale(img, (w, h))
+# def load_scaled_image(path):
+#     img = pygame.image.load(path).convert()
+#     w = int(img.get_width() * assets.scale_x)
+#     h = int(img.get_height() * assets.scale_y)
+#     return pygame.transform.scale(img, (w, h))
 class Severe(State):
     def __init__(self):
         super().__init__("severe")
@@ -21,7 +21,7 @@ class Severe(State):
     def on_enter(self):
         injury = self.manager.current_injury
         data = guide_data[injury]
-        self.bg = load_scaled_image(data["severe_bg"])
+        self.bg = pygame.image.load(data["severe_bg"]).convert()
 
     def handle_events(self, events):
         if not self.surface:

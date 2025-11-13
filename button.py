@@ -2,15 +2,10 @@ import pygame
 import assets
 class Button:
     def __init__(self, x, y, image, scale=1.0, click_sound=None):
-        width, height = image.get_size()
-
-        scaled_w = int(width * scale * assets.scale_x * 1.8)   # +10% width
-        scaled_h = int(height * scale * assets.scale_y * 1.33) # +33% height
-        scaled_x = int(x * assets.scale_x)
-        scaled_y = int(y * assets.scale_y)
-
-        self.image = pygame.transform.scale(image, (scaled_w, scaled_h))
-        self.rect = self.image.get_rect(topleft=(scaled_x, scaled_y))
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
+        self.rect = self.image.get_rect(topleft=(x, y))
         self.click_sound = click_sound
         self.pressed_inside = False
 

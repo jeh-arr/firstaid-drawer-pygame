@@ -7,11 +7,11 @@ from guide_data import guide_data
 from utils import trigger_solenoid, send_sms
 
 
-def load_scaled_image(path):
-    img = pygame.image.load(path).convert()
-    w = int(img.get_width() * assets.scale_x)
-    h = int(img.get_height() * assets.scale_y)
-    return pygame.transform.scale(img, (w, h))
+# def load_scaled_image(path):
+#     img = pygame.image.load(path).convert()
+#     w = int(img.get_width() * assets.scale_x)
+#     h = int(img.get_height() * assets.scale_y)
+#     return pygame.transform.scale(img, (w, h))
 class Guide(State):
     def __init__(self):
         super().__init__("guide")
@@ -34,7 +34,7 @@ class Guide(State):
         """Load correct images for selected injury."""
         injury = self.manager.current_injury
         data = guide_data[injury]
-        self.images = [load_scaled_image(path) for path in data["images"]]
+        self.images = [pygame.image.load(path).convert() for path in data["images"]]
         self.index = 0
         self.triggered_solenoid = False
 

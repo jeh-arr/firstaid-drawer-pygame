@@ -8,11 +8,11 @@ from utils import send_sms
 
 
 
-def load_scaled_image(path):
-    img = pygame.image.load(path).convert()
-    w = int(img.get_width() * assets.scale_x)
-    h = int(img.get_height() * assets.scale_y)
-    return pygame.transform.scale(img, (w, h))
+# def load_scaled_image(path):
+#     img = pygame.image.load(path).convert()
+#     w = int(img.get_width() * assets.scale_x)
+#     h = int(img.get_height() * assets.scale_y)
+#     return pygame.transform.scale(img, (w, h))
 
 class Triage(State):
     def __init__(self):
@@ -25,7 +25,7 @@ class Triage(State):
         self.answered_yes = False
         self.surface = None
 
-        self.font = pygame.font.Font(None, int(64 * assets.scale_min))
+        self.font = pygame.font.Font(None, 64)
         self.text_color = (164, 0, 0)
     
     def on_enter(self):
@@ -37,7 +37,7 @@ class Triage(State):
             return
 
         try:
-            self.bg = load_scaled_image(data["question_bg"])
+            self.bg = pygame.image.load(data["question_bg"]).convert()
             self.questions = data.get("questions", [])
             self.severe_bg = data.get("severe_bg")
         except (FileNotFoundError, TypeError):
@@ -76,8 +76,8 @@ class Triage(State):
             text = self.questions[self.index]
             rendered = self.font.render(text, True, self.text_color)
             # Y position scaled relative to screen height
-            y_pos = int(600 * assets.scale_y)
-            rect = rendered.get_rect(center=(surface.get_width() // 2, y_pos))
+            # y_pos = int(600 * assets.scale_y)
+            rect = rendered.get_rect(center=(surface.get_width() // 2, 600))
             surface.blit(rendered, rect)
 
         self.yes_btn.draw(surface)
