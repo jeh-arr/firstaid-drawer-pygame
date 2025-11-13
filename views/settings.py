@@ -78,9 +78,17 @@ class Settings(State):
         y_start = int(screen_h * 0.55)
         x_min = 400
 
+        mx, my = pos
+
         for row_i, row in enumerate(virtualkeyboard.keyboard_layout):
-            x_start = x_min
+            # same width calculation as draw_keyboard
+            total_row_w = sum(
+                [300 if k == "SPACE" else 140 if k in ("BACK", "ENTER") else key_w for k in row if k]
+            ) + (len(row) - 1) * spacing
+
+            x_start = max(x_min, (screen_w - total_row_w) // 2)
             y = y_start + row_i * (key_h + spacing)
+
             for key in row:
                 if key == "SPACE":
                     w = 300
@@ -91,11 +99,13 @@ class Settings(State):
                     continue
                 else:
                     w = key_w
-                if pygame.Rect(x_start, y, w, key_h).collidepoint(pos):
+
+                rect = pygame.Rect(x_start, y, w, key_h)
+                if rect.collidepoint(mx, my):
                     return key
+
                 x_start += w + spacing
         return None
-
     def draw(self, surface):
         self.surface = surface
         surface.fill((255, 255, 255))

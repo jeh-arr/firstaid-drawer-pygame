@@ -48,4 +48,4 @@ class MainMenu(State):
         surface.blit(self.bg, (0, 0))
         self.emergency_btn.draw(surface)
         self.learning_btn.draw(surface)
-        pygame.draw.rect(surface, (255, 0, 0), SECRET_ZONE, 2)
+        # pygame.draw.rect(surface, (255, 0, 0), SECRET_ZONE, 2)
